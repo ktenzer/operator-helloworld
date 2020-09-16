@@ -1,2 +1,8 @@
 ---
 # tasks file for hello
+- name: Hello World Task
+  debug:
+    msg: "Hello World! I live in a namespace called {{ meta.namespace }}"
+  when: toggle_message
+      
+  
