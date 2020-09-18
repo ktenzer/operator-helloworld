@@ -4,5 +4,22 @@
   debug:
     msg: "Hello World! I live in a namespace called {{ meta.namespace }}"
   when: toggle_message
+
+- name: Get Application Domain from Cluster Ingress
+  k8s_info:
+    api_version: config.openshift.io/v1
+    kind: Ingress
+    name: cluster
+  when: application_domain is undefined
+  register: ingress
+
+- name: Set Application Domain
+  set_fact:
+    application_domain: "{{ ingress.resources[0].spec.domain }}"
+  when: application_domain is undefined
+
+- name: Print application domain
+  debug:
+    msg: "Application domain is {{ application_domain }}"
       
   
