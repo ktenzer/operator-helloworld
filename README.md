@@ -36,4 +36,4 @@ The Ansible runner and http runner is used to run a local version of the operato
 
 ## Install Operator Framework SDK
 
-You can simply [download](https://github.com/operator-framework/operator-sdk/releases) a pre-built release and install it under /usr/local/bin.
+You can simply [Downloads](https://github.com/operator-framework/operator-sdk/releases) a pre-built release and install it under /usr/local/bin.
