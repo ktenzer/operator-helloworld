@@ -21,5 +21,89 @@
 - name: Print application domain
   debug:
     msg: "Application domain is {{ application_domain }}"
+
+- name: Deploy helloworld service
+  k8s:
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        namespace: "{{ meta.namespace }}"
+        labels:
+          app: helloworld
+        name: helloworld
+      spec:
+        ports:
+        - port: 8080
+          targetPort: 8080
+        selector:
+          app: helloworld
+          name: helloworld
+      status:
+        loadBalancer: {}
+
+- name: Deploy helloworld app
+  k8s:
+    definition:
+      kind: Deployment
+      apiVersion: apps/v1
+      metadata:
+        name: helloworld
+        namespace: "{{ meta.namespace }}"
+        labels:
+          app: helloworld
+      spec:
+        replicas: 1
+        strategy:
+          type: RollingUpdate
+        selector:
+          matchLabels:
+            app: helloworld
+        template:
+          metadata:
+            labels:
+              app: helloworld
+              name: helloworld
+          spec:
+            containers:
+            - image: openshift/hello-openshift
+              imagePullPolicy: Always
+              name: helloworld
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: 8080
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 60
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: 8080
+                initialDelaySeconds: 120
+                periodSeconds: 10
+              ports:
+              - containerPort: 8080
+            restartPolicy: Always
+        triggers:
+        - type: ConfigChange
       
-  
+- name: Deploy helloworld route
+  k8s:
+    definition:
+      apiVersion: route.openshift.io/v1
+      kind: Route
+      metadata:
+        namespace: "{{ meta.namespace }}"
+        annotations:
+          openshift.io/host.generated: "true"
+        name: helloworld
+      spec:
+        host: "hello-{{ meta.namespace }}.{{application_domain}}"
+        to:
+          kind: Service
+          name: helloworld
+          weight: 100
+        port:
+          targetPort: 8080
+        wildcardPolicy: None
