@@ -9,9 +9,7 @@ Add the docker ce repositories. Note: you can also use podman and buildah instea
 
 ```$ sudo dnf -y install dnf-plugins-core```
 
-```$ sudo dnf config-manager \
-    --add-repo \
-    https://download.docker.com/linux/fedora/docker-ce.repo```
+```$ sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo```
 
 ## Install docker-ce
 
