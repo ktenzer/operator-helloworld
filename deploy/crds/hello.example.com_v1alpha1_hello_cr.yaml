@@ -4,4 +4,3 @@ metadata:
   name: example-hello
 spec:
   # Add fields here
-  toggle_message: true
