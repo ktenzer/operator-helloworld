@@ -133,6 +133,8 @@ In this exercise you will complete the following:
 * Deploy operator to namespace so it runs without the ansible-runner
 
 ### Update Ansible role to get cluster domain name and save as a fact
+Here we will learn to use the k8s Ansible module to gather information we want to use later in our automation. In this case the cluster domain name.
+
 ```$ vi roles/hello/tasks/main.yml```
 
 ```- name: Get Application Domain from Cluster Ingress
@@ -155,10 +157,12 @@ In this exercise you will complete the following:
 
 #### Run Operator using ansible-runner
 Each time Operator is started or something changes with our CRD the Ansible role will run and our changes will of course be executed.
+
 ```$ operator-sdk run --local```
 
 ### Update Ansible role to deploy hellowoworld application
-Notice the route is using the cluster domain we gathered in the previous steps. In this step we will create a deployment, service and route.
+Now we will learn to use the k8s Ansible module to deploy an application. Notice the route is using the cluster domain we gathered in the previous step. In this step we will create a deployment, service and route for our helloworld application.
+
 ```$ vi roles/hello/tasks/main.yml```
 
 ```- name: Deploy helloworld service
@@ -250,6 +254,7 @@ Notice the route is using the cluster domain we gathered in the previous steps. 
 
 ### Run Operator using ansible-runner
 This time we should see the application being deployed. A single pod should start and a service/route should be created.
+
 ```$ operator-sdk run --local```
 
 ### Test our deployment
