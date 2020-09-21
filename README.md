@@ -147,6 +147,13 @@ Each time Operator is started or something changes with our CRD the Ansible role
 
 ```$ ansible-operator run local```
 
+```
+TASK [Print application domain] ********************************
+ok: [localhost] => {
+    "msg": "Application domain is apps.ocp4.keithtenzer.com"
+}
+```
+
 ### Update Ansible role to deploy hellowoworld application
 Now we will learn to use the k8s Ansible module to deploy an application. Notice the route is using the cluster domain we gathered in the previous step. In this step we will create a deployment, service and route for our helloworld application. Append the following tasks to the Ansible role.
 
