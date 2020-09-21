@@ -166,7 +166,7 @@ Now we will learn to use the k8s Ansible module to deploy an application. Notice
       apiVersion: v1
       kind: Service
       metadata:
-        namespace: "{{ meta.namespace }}"
+        namespace: "{{ ansible_operator_meta.namespace }}"
         labels:
           app: helloworld
         name: helloworld
@@ -187,7 +187,7 @@ Now we will learn to use the k8s Ansible module to deploy an application. Notice
       apiVersion: apps/v1
       metadata:
         name: helloworld
-        namespace: "{{ meta.namespace }}"
+        namespace: "{{ ansible_operator_meta.namespace }}"
         labels:
           app: helloworld
       spec:
@@ -232,12 +232,12 @@ Now we will learn to use the k8s Ansible module to deploy an application. Notice
       apiVersion: route.openshift.io/v1
       kind: Route
       metadata:
-        namespace: "{{ meta.namespace }}"
+        namespace: "{{ ansible_operator_meta.namespace }}"
         annotations:
           openshift.io/host.generated: "true"
         name: helloworld
       spec:
-        host: "hello-{{ meta.namespace }}.{{application_domain}}"
+        host: "hello-{{ ansible_operator_meta.namespace }}.{{application_domain}}"
         to:
           kind: Service
           name: helloworld
