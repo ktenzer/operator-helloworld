@@ -54,13 +54,13 @@ In this exercise you will complete the following:
 ### Create Operator Scaffolding
 Using the operator-sdk, create the scaffolding for your new operator. The operator-sdk will generate an Ansible role, create a new custom resource definition (CRD) and all the necessary k8s objects to install the operator. This is a two step process. First initialize and then create API.
 
-```mkdir operator-helloworld```
+```$ mkdir operator-helloworld```
 
-```cd operator-helloworld```
+```$ cd operator-helloworld```
 
-```operator-sdk init --plugins=ansible --domain=hello.example.com```
+```$ operator-sdk init --plugins=ansible --domain=hello.example.com```
 
-```operator-sdk create api --group cache --version v1 --kind Hello --generate-role```
+```$ operator-sdk create api --group cache --version v1 --kind Hello --generate-role```
 
 ### Create Custom Resource Definition (CRD)
 The operator-sdk will generate a CRD this will extend the k8s API and allow users to interact with the Operator through the API. Here we will install CRD in the current namespace operator-helloworld.
