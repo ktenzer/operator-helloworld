@@ -14,7 +14,9 @@ Add the docker ce repositories. Note: you can also use podman and buildah instea
 ### Install docker-ce
 
 ```$ sudo dnf -y install docker-ce docker-ce-cli```
+
 ```$ sudo systemctl start docker```
+
 ```$ sudo systemctl enable docker```
 
 ### Install Ansible and Module Dependencies
