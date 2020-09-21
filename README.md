@@ -26,6 +26,7 @@ Add the docker ce repositories. Note: you can also use podman and buildah instea
 The Ansible runner and http runner is used to run a local version of the operator. This is very useful for development and testing.
 
 ```$ pip3 install --user ansible-runner```
+
 ```$ pip3 install --user ansible-runner-http```
 
 #### Install required python modules
@@ -61,13 +62,16 @@ The operator-sdk will generate a CRD this will extend the k8s API and allow user
 The operator-sdk will autogenerate these k8s objects so we just need to create them in our project.
 
 ```$ oc create -f deploy/role.yaml```
+
 ```$ oc create -f deploy/role_binding.yaml```
+
 ```$ oc create -f deploy/service_account.yaml```
 
 #### Add Print Task to Operator Role
 The operator framework implements Ansible roles. By default it will create a single role. Roles are mapped to the API endpoint of the CRD in the watches.yaml file. You can have many roles as well. If you have more roles you will typically use the default role to import and execute other roles that handle specific tasks. In this case we will be adding a print statement that will print some debug when a parameter toggle_message is set to true.
 
 ```$ vi roles/hello/tasks/main.yml```
+
 ```---
 # tasks file for hello
 - name: Hello World Task
@@ -130,6 +134,7 @@ In this exercise you will complete the following:
 
 ### Update Ansible role to get cluster domain name and save as a fact
 ```$ vi roles/hello/tasks/main.yml```
+
 ```- name: Get Application Domain from Cluster Ingress
   k8s_info:
     api_version: config.openshift.io/v1
@@ -155,6 +160,7 @@ Each time Operator is started or something changes with our CRD the Ansible role
 ### Update Ansible role to deploy hellowoworld application
 Notice the route is using the cluster domain we gathered in the previous steps. In this step we will create a deployment, service and route.
 ```$ vi roles/hello/tasks/main.yml```
+
 ```- name: Deploy helloworld service
   k8s:
     definition:
