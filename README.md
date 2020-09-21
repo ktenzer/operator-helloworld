@@ -262,7 +262,6 @@ helloworld   hello-operator-helloworld.apps.ocp4.keithtenzer.com          hellow
 ```
 
 ```$ curl http://hello-operator-helloworld.apps.ocp4.keithtenzer.com
-Hello OpenShift!
-```
+Hello OpenShift!```
 
 Congrats if you got this far you are ready to write your own Operators!
