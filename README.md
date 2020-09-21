@@ -112,6 +112,7 @@ spec:
 
 #### Run Operator using ansible-runner
 Now that we have implemented some tasks and our parameter we can run ther Operator locally using the ansible-runner to test it. 
+
 ```$ operator-sdk run --local```
 
 #### Create a hello customer resource
