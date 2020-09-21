@@ -1,0 +1,6 @@
+apiVersion: cache.hello.example.com/v1
+kind: Hello
+metadata:
+  name: hello-sample
+spec:
+  foo: bar
