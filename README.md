@@ -260,8 +260,11 @@ $ oc get routes
 NAME         HOST/PORT                                             PATH   SERVICES     PORT   TERMINATION   WILDCARD
 helloworld   hello-operator-helloworld.apps.ocp4.keithtenzer.com          helloworld   8080
 ```
+fgffg
 
-```$ curl http://hello-operator-helloworld.apps.ocp4.keithtenzer.com
-Hello OpenShift!```
+```
+$ curl http://hello-operator-helloworld.apps.ocp4.keithtenzer.com
+Hello OpenShift!
+```
 
 Congrats if you got this far you are ready to write your own Operators!
