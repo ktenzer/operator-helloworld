@@ -1,0 +1,8 @@
+domain: hello.example.com
+layout: ansible.sdk.operatorframework.io/v1
+projectName: operator-helloworld
+resources:
+- group: cache
+  kind: Hello
+  version: v1
+version: 3-alpha

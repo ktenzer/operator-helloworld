@@ -1,8 +1,8 @@
 ---
-# tasks file for hello
+# tasks file for Hello
 - name: Hello World Task
   debug:
-    msg: "Hello World! I live in a namespace called {{ meta.namespace }}"
+    msg: "Hello World! I live in a namespace called {{ ansible_operator_meta.namespace }}"
   when: toggle_message
 
 - name: Get Application Domain from Cluster Ingress
@@ -28,7 +28,7 @@
       apiVersion: v1
       kind: Service
       metadata:
-        namespace: "{{ meta.namespace }}"
+        namespace: "{{ ansible_operator_meta.namespace }}"
         labels:
           app: helloworld
         name: helloworld
@@ -49,7 +49,7 @@
       apiVersion: apps/v1
       metadata:
         name: helloworld
-        namespace: "{{ meta.namespace }}"
+        namespace: "{{ ansible_operator_meta.namespace }}"
         labels:
           app: helloworld
       spec:
@@ -87,19 +87,19 @@
             restartPolicy: Always
         triggers:
         - type: ConfigChange
-      
+
 - name: Deploy helloworld route
   k8s:
     definition:
       apiVersion: route.openshift.io/v1
       kind: Route
       metadata:
-        namespace: "{{ meta.namespace }}"
+        namespace: "{{ ansible_operator_meta.namespace }}"
         annotations:
           openshift.io/host.generated: "true"
         name: helloworld
       spec:
-        host: "hello-{{ meta.namespace }}.{{application_domain}}"
+        host: "hello-{{ ansible_operator_meta.namespace }}.{{application_domain}}"
         to:
           kind: Service
           name: helloworld
