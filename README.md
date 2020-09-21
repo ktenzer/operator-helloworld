@@ -121,3 +121,141 @@ ok: [localhost] => {
 }
 ```
 
+## Exercise 2
+In this exercise you will complete the following:
+* Expand Ansible role to get the cluster domain name and save that in a fact
+* Expand the Ansible role to deply a helloworld application
+* Test the operator using the ansible-runner
+* Deploy operator to namespace so it runs without the ansible-runner
+
+### Update Ansible role to get cluster domain name and save as a fact
+```$ vi roles/hello/tasks/main.yml```
+```- name: Get Application Domain from Cluster Ingress
+  k8s_info:
+    api_version: config.openshift.io/v1
+    kind: Ingress
+    name: cluster
+  when: application_domain is undefined
+  register: ingress
+
+- name: Set Application Domain
+  set_fact:
+    application_domain: "{{ ingress.resources[0].spec.domain }}"
+  when: application_domain is undefined
+
+- name: Print application domain
+  debug:
+    msg: "Application domain is {{ application_domain }}"
+```
+
+#### Run Operator using ansible-runner
+Each time Operator is started or something changes with our CRD the Ansible role will run and our changes will of course be executed.
+```$ operator-sdk run --local```
+
+### Update Ansible role to deploy hellowoworld application
+Notice the route is using the cluster domain we gathered in the previous steps. In this step we will create a deployment, service and route.
+```$ vi roles/hello/tasks/main.yml```
+```- name: Deploy helloworld service
+  k8s:
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        namespace: "{{ meta.namespace }}"
+        labels:
+          app: helloworld
+        name: helloworld
+      spec:
+        ports:
+        - port: 8080
+          targetPort: 8080
+        selector:
+          app: helloworld
+          name: helloworld
+      status:
+        loadBalancer: {}
+
+- name: Deploy helloworld app
+  k8s:
+    definition:
+      kind: Deployment
+      apiVersion: apps/v1
+      metadata:
+        name: helloworld
+        namespace: "{{ meta.namespace }}"
+        labels:
+          app: helloworld
+      spec:
+        replicas: 1
+        strategy:
+          type: RollingUpdate
+        selector:
+          matchLabels:
+            app: helloworld
+        template:
+          metadata:
+            labels:
+              app: helloworld
+              name: helloworld
+          spec:
+            containers:
+            - image: openshift/hello-openshift
+              imagePullPolicy: Always
+              name: helloworld
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: 8080
+                initialDelaySeconds: 60
+                periodSeconds: 10
+                timeoutSeconds: 60
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: 8080
+                initialDelaySeconds: 120
+                periodSeconds: 10
+              ports:
+              - containerPort: 8080
+            restartPolicy: Always
+        triggers:
+        - type: ConfigChange
+
+- name: Deploy helloworld route
+  k8s:
+    definition:
+      apiVersion: route.openshift.io/v1
+      kind: Route
+      metadata:
+        namespace: "{{ meta.namespace }}"
+        annotations:
+          openshift.io/host.generated: "true"
+        name: helloworld
+      spec:
+        host: "hello-{{ meta.namespace }}.{{application_domain}}"
+        to:
+          kind: Service
+          name: helloworld
+          weight: 100
+        port:
+          targetPort: 8080
+        wildcardPolicy: None
+```
+
+### Run Operator using ansible-runner
+This time we should see the application being deployed. A single pod should start and a service/route should be created.
+```$ operator-sdk run --local```
+
+### Test our deployment
+To test simply use curl against the route URL.
+
+```$ curl http://hello-operator-helloworld.apps.ocp4.keithtenzer.com
+Hello OpenShift!
+```
+
+### Deply Operator into namespace
+The operator-sdk creates a deployment for deplying the operator. We simply need to create it.
+
+```$ oc create -f deploy/operator.yaml```
+
+Congrats if you got this far you are ready to write your own Operators!
