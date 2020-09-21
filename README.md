@@ -53,14 +53,19 @@ In this exercise you will complete the following:
 
 ### Create Operator Scaffolding
 Using the operator-sdk, create the scaffolding for your new operator. The operator-sdk will generate an Ansible role, create a new custom resource definition (CRD) and all the necessary k8s objects to install the operator.
-``` operator-sdk new operator-helloworld --api-version=hello.example.com/v1alpha1 --kind=Hello --type=ansible```
+
+```mkdir operator-helloworld```
+
+```cd operator-helloworld```
+
+```operator-sdk init --plugins=ansible --domain=hello.example.com```
+
+```operator-sdk create api --group cache --version v1 --kind Hello --generate-role```
 
 ### Create Custom Resource Definition (CRD)
 The operator-sdk will generate a CRD this will extend the k8s API and allow users to interact with the Operator through the API.
 
-```$ cd operator-helloworld```
-
-```$ oc create -f deploy/crds/hello.example.com_hellos_crd.yaml```
+```$ make install```
 
 ### Create role, role binding and service
 The operator-sdk will autogenerate these k8s objects so we just need to create them in our project.
@@ -76,55 +81,40 @@ The operator framework implements Ansible roles. By default it will create a sin
 
 ```$ vi roles/hello/tasks/main.yml```
 
-```---
+```
+---
 # tasks file for hello
 - name: Hello World Task
   debug:
-    msg: "Hello World! I live in a namespace called {{ meta.namespace }}"
+    msg: "Hello World! I live in a namespace called {{ ansible_operator_meta.namespace }}"
   when: toggle_message
-
-- name: Get Application Domain from Cluster Ingress
-  k8s_info:
-    api_version: config.openshift.io/v1
-    kind: Ingress
-    name: cluster
-  when: application_domain is undefined
-  register: ingress
-
-- name: Set Application Domain
-  set_fact:
-    application_domain: "{{ ingress.resources[0].spec.domain }}"
-  when: application_domain is undefined
-
-- name: Print application domain
-  debug:
-    msg: "Application domain is {{ application_domain }}"
 ```
 #### Add parameter to the Operator Custom Resource
 By default the auto-generated CR is not parameterized. Here we will add the toggle_message parameter. As you can see above any parameters under the spec are automatically visible in Ansible. This is how you get input from your users.
 
 ```$ vi deploy/crds/hello.example.com_v1alpha1_hello_cr.yaml```
 
-```apiVersion: hello.example.com/v1alpha1
+```
+apiVersion: cache.hello.example.com/v1
 kind: Hello
 metadata:
-  name: example-hello
+  name: hello-sample
 spec:
-  # Add fields here
   toggle_message: true
 ```
 
 #### Run Operator using ansible-runner
 Now that we have implemented some tasks and our parameter we can run ther Operator locally using the ansible-runner to test it. 
 
-```$ operator-sdk run --local```
+```$ ansible-operator run local```
 
 #### Create a hello customer resource
 Open another terminal and create the CR. You should then see the CR created, the Operator will notice that and print our debug message.
 
-```$ oc create -f deploy/crds/hello.example.com_v1alpha1_hello_cr.yaml```
+```$ oc create -f config/samples/cache_v1_hello.yaml```
 
-```TASK [Hello World Task] ********************************
+```
+TASK [Hello World Task] ********************************
 ok: [localhost] => {
     "msg": "Hello World! I live in a namespace called operator-helloworld"
 }
@@ -138,11 +128,12 @@ In this exercise you will complete the following:
 * Deploy operator to namespace so it runs without the ansible-runner
 
 ### Update Ansible role to get cluster domain name and save as a fact
-Here we will learn to use the k8s Ansible module to gather information we want to use later in our automation. In this case the cluster domain name.
+Here we will learn to use the k8s Ansible module to gather information we want to use later in our automation. In this case the cluster domain name. Append the following tasks to the Ansible role.
 
 ```$ vi roles/hello/tasks/main.yml```
 
-```- name: Get Application Domain from Cluster Ingress
+```
+- name: Get Application Domain from Cluster Ingress
   k8s_info:
     api_version: config.openshift.io/v1
     kind: Ingress
@@ -163,14 +154,15 @@ Here we will learn to use the k8s Ansible module to gather information we want t
 #### Run Operator using ansible-runner
 Each time Operator is started or something changes with our CRD the Ansible role will run and our changes will of course be executed.
 
-```$ operator-sdk run --local```
+```$ ansible-operator run local```
 
 ### Update Ansible role to deploy hellowoworld application
-Now we will learn to use the k8s Ansible module to deploy an application. Notice the route is using the cluster domain we gathered in the previous step. In this step we will create a deployment, service and route for our helloworld application.
+Now we will learn to use the k8s Ansible module to deploy an application. Notice the route is using the cluster domain we gathered in the previous step. In this step we will create a deployment, service and route for our helloworld application. Append the following tasks to the Ansible role.
 
 ```$ vi roles/hello/tasks/main.yml```
 
-```- name: Deploy helloworld service
+```
+- name: Deploy helloworld service
   k8s:
     definition:
       apiVersion: v1
@@ -260,7 +252,7 @@ Now we will learn to use the k8s Ansible module to deploy an application. Notice
 ### Run Operator using ansible-runner
 This time we should see the application being deployed. A single pod should start and a service/route should be created.
 
-```$ operator-sdk run --local```
+```$ ansible-operator run local```
 
 ### Test our deployment
 To test simply use curl against the route URL.
@@ -268,10 +260,5 @@ To test simply use curl against the route URL.
 ```$ curl http://hello-operator-helloworld.apps.ocp4.keithtenzer.com
 Hello OpenShift!
 ```
-
-### Deply Operator into namespace
-The operator-sdk creates a deployment for deplying the operator. We simply need to create it.
-
-```$ oc create -f deploy/operator.yaml```
 
 Congrats if you got this far you are ready to write your own Operators!
