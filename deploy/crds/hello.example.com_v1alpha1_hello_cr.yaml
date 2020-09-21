@@ -1,7 +1,0 @@
-apiVersion: hello.example.com/v1alpha1
-kind: Hello
-metadata:
-  name: example-hello
-spec:
-  # Add fields here
-  toggle_message: true

@@ -1,0 +1,20 @@
+# permissions for end users to view hellos.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: hello-viewer-role
+rules:
+- apiGroups:
+  - cache.hello.example.com
+  resources:
+  - hellos
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cache.hello.example.com
+  resources:
+  - hellos/status
+  verbs:
+  - get
