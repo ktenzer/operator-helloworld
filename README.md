@@ -253,7 +253,13 @@ This time we should see the application being deployed. A single pod should star
 ```$ ansible-operator run local```
 
 ### Test our deployment
-To test simply use curl against the route URL.
+To test simply use curl against the route URL. It does take 30 seconds or so to start application.
+
+```
+$ oc get routes
+NAME         HOST/PORT                                             PATH   SERVICES     PORT   TERMINATION   WILDCARD
+helloworld   hello-operator-helloworld.apps.ocp4.keithtenzer.com          helloworld   8080
+```
 
 ```$ curl http://hello-operator-helloworld.apps.ocp4.keithtenzer.com
 Hello OpenShift!
