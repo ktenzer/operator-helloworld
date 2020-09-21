@@ -67,15 +67,6 @@ The operator-sdk will generate a CRD this will extend the k8s API and allow user
 
 ```$ make install```
 
-### Create role, role binding and service
-The operator-sdk will autogenerate these k8s objects so we just need to create them in our project.
-
-```$ oc create -f deploy/role.yaml```
-
-```$ oc create -f deploy/role_binding.yaml```
-
-```$ oc create -f deploy/service_account.yaml```
-
 #### Add Print Task to Operator Role
 The operator framework implements Ansible roles. By default it will create a single role. Roles are mapped to the API endpoint of the CRD in the watches.yaml file. You can have many roles as well. If you have more roles you will typically use the default role to import and execute other roles that handle specific tasks. In this case we will be adding a print statement that will print some debug when a parameter toggle_message is set to true.
 
@@ -92,7 +83,7 @@ The operator framework implements Ansible roles. By default it will create a sin
 #### Add parameter to the Operator Custom Resource
 By default the auto-generated CR is not parameterized. Here we will add the toggle_message parameter. As you can see above any parameters under the spec are automatically visible in Ansible. This is how you get input from your users.
 
-```$ vi deploy/crds/hello.example.com_v1alpha1_hello_cr.yaml```
+```$ vi config/samples/cache_v1_hello.yaml```
 
 ```
 apiVersion: cache.hello.example.com/v1
