@@ -52,7 +52,7 @@ In this exercise you will complete the following:
 ```$ oc new-project operator-helloworld```
 
 ### Create Operator Scaffolding
-Using the operator-sdk, create the scaffolding for your new operator. The operator-sdk will generate an Ansible role, create a new custom resource definition (CRD) and all the necessary k8s objects to install the operator.
+Using the operator-sdk, create the scaffolding for your new operator. The operator-sdk will generate an Ansible role, create a new custom resource definition (CRD) and all the necessary k8s objects to install the operator. This is a two step process. First initialize and then create API.
 
 ```mkdir operator-helloworld```
 
@@ -63,12 +63,12 @@ Using the operator-sdk, create the scaffolding for your new operator. The operat
 ```operator-sdk create api --group cache --version v1 --kind Hello --generate-role```
 
 ### Create Custom Resource Definition (CRD)
-The operator-sdk will generate a CRD this will extend the k8s API and allow users to interact with the Operator through the API.
+The operator-sdk will generate a CRD this will extend the k8s API and allow users to interact with the Operator through the API. Here we will install CRD in the current namespace operator-helloworld.
 
 ```$ make install```
 
 #### Add Print Task to Operator Role
-The operator framework implements Ansible roles. By default it will create a single role. Roles are mapped to the API endpoint of the CRD in the watches.yaml file. You can have many roles as well. If you have more roles you will typically use the default role to import and execute other roles that handle specific tasks. In this case we will be adding a print statement that will print some debug when a parameter toggle_message is set to true.
+The operator framework implements Ansible roles. By default it will create a single role but you can certainly have many roles. Roles are mapped to the API endpoint of the CRD in the watches.yaml file. In this case we will be adding a print statement that will print some debug when a parameter toggle_message is set to true to the role.
 
 ```$ vi roles/hello/tasks/main.yml```
 
@@ -81,7 +81,7 @@ The operator framework implements Ansible roles. By default it will create a sin
   when: toggle_message
 ```
 #### Add parameter to the Operator Custom Resource
-By default the auto-generated CR is not parameterized. Here we will add the toggle_message parameter. As you can see above any parameters under the spec are automatically visible in Ansible. This is how you get input from your users.
+Here we will add the toggle_message parameter to the CR. Any parameters under the CR spec are automatically visible in Ansible. This is how you get input from your users. In addition as you may have noticed you can access CR metadata using the ansible_operator_meta parameter in ansible. In the above example that is the name os the namespace.
 
 ```$ vi config/samples/cache_v1_hello.yaml```
 
@@ -100,7 +100,7 @@ Now that we have implemented some tasks and our parameter we can run ther Operat
 ```$ ansible-operator run local```
 
 #### Create a hello customer resource
-Open another terminal and create the CR. You should then see the CR created, the Operator will notice that and print our debug message.
+Open another terminal and create the CR. Once the CR is created, the Operator will execute the Ansible role and print our debug message.
 
 ```$ oc create -f config/samples/cache_v1_hello.yaml```
 
@@ -155,7 +155,7 @@ ok: [localhost] => {
 ```
 
 ### Update Ansible role to deploy hellowoworld application
-Now we will learn to use the k8s Ansible module to deploy an application. Notice the route is using the cluster domain we gathered in the previous step. In this step we will create a deployment, service and route for our helloworld application. Append the following tasks to the Ansible role.
+Now we will learn to use the k8s Ansible module to deploy an application. We will deploy a helloworld application that prints to STDOUT. Notice the route is using the cluster domain we gathered in the previous step. In this step we will create a deployment, service and route for our helloworld application. Append the following tasks to the Ansible role.
 
 ```$ vi roles/hello/tasks/main.yml```
 
@@ -260,11 +260,15 @@ $ oc get routes
 NAME         HOST/PORT                                             PATH   SERVICES     PORT   TERMINATION   WILDCARD
 helloworld   hello-operator-helloworld.apps.ocp4.keithtenzer.com          helloworld   8080
 ```
-fgffg
 
 ```
 $ curl http://hello-operator-helloworld.apps.ocp4.keithtenzer.com
 Hello OpenShift!
 ```
 
-Congrats if you got this far you are ready to write your own Operators!
+### Cleanup Operator
+If you want to cleanup it is a simple make command.
+
+```$ make undeploy```
+
+Congrats if you got this far you are ready to write your own Operators in Ansible!
