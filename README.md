@@ -253,7 +253,13 @@ This time we should see the application being deployed. A single pod should star
 ```$ ansible-operator run local```
 
 ### Test our deployment
-To test simply use curl against the route URL. It does take 30 seconds or so to start application.
+To test simply use curl against the route URL. It does take a minute or so to start application.
+
+```
+$ oc get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+helloworld-f9d964dcc-jgcmn   1/1     Running   0          70s
+```
 
 ```
 $ oc get routes
