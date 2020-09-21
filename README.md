@@ -23,7 +23,7 @@ Add the docker ce repositories. Note: you can also use podman and buildah instea
 
 #### Install ansible
 
-```$ dnf install ansible```
+```$ sudo dnf install -y ansible```
 
 The Ansible runner and http runner is used to run a local version of the operator. This is very useful for development and testing.
 
@@ -33,7 +33,9 @@ The Ansible runner and http runner is used to run a local version of the operato
 
 #### Install required python modules
 
-```$ pip3 install --user requests $ pip3 install --user openshift```
+```$ pip3 install --user requests``` 
+
+```$ pip3 install --user openshift```
 
 ### Install Operator Framework SDK
 
