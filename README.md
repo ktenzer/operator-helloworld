@@ -307,6 +307,8 @@ Go to [Quay.io](https://quay.io/) and create your own account if you don't have 
 
 ```$ sudo make docker-build docker-push IMG=quay.io/ktenzer/operator-helloworld:latest```
 
+Make the operator-helloworld image in your quay.io account public. Log into quya.io, click on the image. Under settings (on the left) there is option to make the image public.
+
 ### Deploy Operator to OpenShift Cluster
 By default the operator will be deployed to a project called operator-helloworld-system. You can change this by editing the ```config/default/kustomization.yaml``` file.
 
