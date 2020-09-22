@@ -313,6 +313,7 @@ By default the operator will be deployed to a project called operator-helloworld
 ```$ make deploy IMG=quay.io/ktenzer/operator-helloworld:latest```
 
 Check Operator Deployment
+
 ```$ oc get deployment -n operator-helloworld-system```
 
 ### Cleanup Operator
