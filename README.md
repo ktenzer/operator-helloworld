@@ -292,6 +292,29 @@ $ curl http://hello-operator-helloworld.apps.ocp4.keithtenzer.com
 Hello OpenShift!
 ```
 
+## Exercise 3
+In this exercise you will complete the following:
+* Create a quay.io account
+* Build image of our Operator and push it to quay.io
+* Deploy Operator to OpenShift cluster
+
+### Create Quay.io Account
+Quay.io us a container registry provided by Red Hat. You can create your own account push container images to it. Each image can be public or private. To make images available to OpenShift you will need to make them public.
+
+Go to [Quay.io](https://quay.io/) and create your own account if you don't have one.
+
+### Build Operator image and push to quay.io
+
+```$ make docker-build docker-push IMG=quay.io/ktenzer/operator-helloworld:latest```
+
+### Deploy Operator to OpenShift Cluster
+By default the operator will be deployed to a project called operator-helloworld-system. You can change this by editing the ```config/default/kustomization.yaml``` file.
+
+```$ make deploy IMG=quay.io/ktenzer/operator-helloworld:latest```
+
+Check Operator Deployment
+```$ oc get deployment -n operator-helloworld-system```
+
 ### Cleanup Operator
 If you want to cleanup it is a simple make command.
 
