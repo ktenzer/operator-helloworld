@@ -318,6 +318,11 @@ Check Operator Deployment
 
 ```$ oc get deployment -n operator-helloworld-system```
 
+```
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+helloworld-controller-manager   1/1     1            1           37s
+```
+
 ### Cleanup Operator
 If you want to cleanup it is a simple make command.
 
