@@ -271,6 +271,7 @@ Now we will learn to use the k8s Ansible module to deploy an application. We wil
 Since we are creating a service and route we need to add those permissions to the role.
 
 Add services so we can create them.
+
 ```$ vi config/rbac/role.yaml```
 
 ```
