@@ -368,8 +368,26 @@ NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
 helloworld-controller-manager   1/1     1            1           37s
 ```
 
-### Cleanup Operator
-If you want to cleanup it is a simple make command.
+### Deploy Helloworld Application using Operator
+Using the Operator we just deployed into the operator-helloworld-system namespace we will now deploy the application using CR.
+
+```$ oc create -f config/samples/cache_v1_hello.yaml -n operator-helloworld-system```
+
+```$ oc get deployment -n operator-helloworld-system```
+
+```
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+helloworld                      1/1     1            1           12m
+helloworld-controller-manager   1/1     1            1           12m
+```
+
+### Cleanup Application
+Removing the CR will delete everything that was created by it since the objects are linked to the CR.
+
+```$ oc delete hello hello-sample -n operator-helloworld-system```
+
+### Cleanup Operator 
+This will remove the Operator, CRD and all the roles.
 
 ```$ make undeploy```
 
