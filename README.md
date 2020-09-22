@@ -305,7 +305,7 @@ Go to [Quay.io](https://quay.io/) and create your own account if you don't have 
 
 ### Build Operator image and push to quay.io
 
-```$ make docker-build docker-push IMG=quay.io/ktenzer/operator-helloworld:latest```
+```$ sudo make docker-build docker-push IMG=quay.io/ktenzer/operator-helloworld:latest```
 
 ### Deploy Operator to OpenShift Cluster
 By default the operator will be deployed to a project called operator-helloworld-system. You can change this by editing the ```config/default/kustomization.yaml``` file.
