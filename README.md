@@ -9,6 +9,7 @@ This training will show you how to setup a development environment and deploy yo
 
 ## Prerequisites
 * A fedora 30 or higher system with access to the Internet
+* OpenShift 4.x environment and a cluster admin account
 
 ## Setup Development Environment
 There are some prerequisites needed to develop and build an operator using Ansible. Also this guide and the operator-sdk assume you know Ansible roles. If you aren not yet up to speed please read about Ansible roles before proceeding.
@@ -53,7 +54,7 @@ The Ansible runner and http runner is used to run a local version of the operato
 ### Install OpenShift Command Line Tools
 The OpenShift command line tools ships with oc and kubectl binaries.
 
-[Download](https://downloads-openshift-console.apps.ocp4.keithtenzer.com/amd64/linux/oc.tar) a pre-built release and install the oc as well as kubectl binaries under /usr/bin. Remember to check the permissions and ensure the binaries have execute permission.
+[Download](https://cloud.redhat.com/openshift/install) a pre-built release and install the oc as well as kubectl binaries under /usr/bin. You will need to login with your Red Hat account and select the infrastructure provider where your OpenShift cluster is running. Remember to check the permissions and ensure the binaries have execute permission. You can also download command line tools for OpenShift from the OpenShift cluster itself under the question mark by your user in the UI.
 
 ### Install Operator Framework SDK
 This training requires minimum v1.0.1 of the operator-sdk and ansible-operator binaries.
