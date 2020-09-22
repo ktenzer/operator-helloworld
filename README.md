@@ -270,18 +270,10 @@ Now we will learn to use the k8s Ansible module to deploy an application. We wil
 ### Update role permissions
 Since we are creating a service and route we need to add those permissions to the role.
 
+Add services so we can create them.
 ```$ vi config/rbac/role.yaml```
 
 ```
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: manager-role
-rules:
-  ##
-  ## Base operator rules
-  ##
   - apiGroups:
       - ""
     resources:
@@ -289,75 +281,35 @@ rules:
       - pods
       - pods/exec
       - pods/log
-```      
-      **- services**
-```      
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
+      - services
+```
+
+Append routes and ingress api groups so we can also manage those objects.
+```
   - apiGroups:
-      - apps
+    - ""
+    - config.openshift.io
     resources:
-      - deployments
-      - daemonsets
-      - replicasets
-      - statefulsets
+    - ingresses
     verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-```      
-  **- apiGroups:**
-    **- ""**
-    **- config.openshift.io**
-    **resources:**
-    **- ingresses**
-    **verbs:**
-    **- get**
-    **- list**
-    **- watch**
-  **- apiGroups:**
-    **- ""**
-    **- route.openshift.io**
-    **resources:**
-    **- routes**
-    **- routes/custom-host**
-    **verbs:**
-    **- create**
-    **- delete**
-    **- deletecollection**
-    **- get**
-    **- list**
-    **- patch**
-    **- update**
-    **- watch**
-```    
-  ##
-  ## Rules for cache.helloworld.example.com/v1, Kind: Helloworld
-  ##
+    - get
+    - list
+    - watch
   - apiGroups:
-      - cache.helloworld.example.com
+    - ""
+    - route.openshift.io
     resources:
-      - helloworlds
-      - helloworlds/status
-      - helloworlds/finalizers
+    - routes
+    - routes/custom-host
     verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
 ```
 ### Run Operator using ansible-runner
 This time we should see the application being deployed. A single pod should start and a service/route should be created.
