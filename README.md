@@ -267,6 +267,94 @@ Now we will learn to use the k8s Ansible module to deploy an application. We wil
         wildcardPolicy: None
 ```
 
+### Update role permissions
+Since we are creating a service and route we need to add those permissions to the role.
+
+```$ vi config/rbac/role.yaml```
+
+```
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+  ##
+  ## Base operator rules
+  ##
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+      - pods
+      - pods/exec
+      - pods/log
+      **- services**
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+    - ""
+    - config.openshift.io
+    resources:
+    - ingresses
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    - route.openshift.io
+    resources:
+    - routes
+    - routes/custom-host
+    verbs:
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  ##
+  ## Rules for cache.helloworld.example.com/v1, Kind: Helloworld
+  ##
+  - apiGroups:
+      - cache.helloworld.example.com
+    resources:
+      - helloworlds
+      - helloworlds/status
+      - helloworlds/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+```
 ### Run Operator using ansible-runner
 This time we should see the application being deployed. A single pod should start and a service/route should be created.
 
