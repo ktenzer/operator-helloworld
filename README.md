@@ -1,4 +1,11 @@
-# Operator Framework using Ansible Training
+# Operator Framework Ansible Training
+This training will show you how to setup a development environment and deploy your first Operator written in Ansible. Upon completing this training you will learn the following:
+* Setup Ansible Operator Development Environment
+* Create Operator Scaffolding and CRD/CR (APIs)
+* Test and Debug Operators
+* Read parameter inputs from CRs into Ansible facts
+* Read and Create k8s objects using the k8s Ansible Module
+* Deploy Application
 
 ## Setup Development Environment
 There are some prerequisites needed to develop and build an operator using Ansible. Also this guide and the operator-sdk assume you know Ansible roles. If you aren not yet up to speed please read about Ansible roles before proceeding.
@@ -37,9 +44,13 @@ The Ansible runner and http runner is used to run a local version of the operato
 
 ```$ pip3 install --user openshift```
 
-### Install Operator Framework SDK
+### Install Make utility
+```$ sudo dnf install -y make```
 
-You can simply [Downloads](https://github.com/operator-framework/operator-sdk/releases) a pre-built release and install it under /usr/local/bin.
+### Install Operator Framework SDK
+This training requires minimum v1.0.1 of the operator-sdk and ansible-operator binaries.
+
+[Download](https://github.com/operator-framework/operator-sdk/releases) a pre-built release of both binaries and install them under /usr/bin.
 
 ## Exercise 1
 In this exercise you will complete the following:
