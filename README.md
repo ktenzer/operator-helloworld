@@ -7,6 +7,9 @@ This training will show you how to setup a development environment and deploy yo
 * Read and Create k8s objects using the k8s Ansible Module
 * Deploy Application
 
+## Prerequisites
+* A fedora 30 or higher system with access to the Internet
+
 ## Setup Development Environment
 There are some prerequisites needed to develop and build an operator using Ansible. Also this guide and the operator-sdk assume you know Ansible roles. If you aren not yet up to speed please read about Ansible roles before proceeding.
 
@@ -46,6 +49,11 @@ The Ansible runner and http runner is used to run a local version of the operato
 
 ### Install Make utility
 ```$ sudo dnf install -y make```
+
+### Install OpenShift Command Line Tools
+The OpenShift command line tools ships with oc and kubectl binaries.
+
+[Download](https://downloads-openshift-console.apps.ocp4.keithtenzer.com/amd64/linux/oc.tar) a pre-built release and install the oc as well as kubectl binaries under /usr/bin. Remember to check the permissions and ensure the binaries have execute permission.
 
 ### Install Operator Framework SDK
 This training requires minimum v1.0.1 of the operator-sdk and ansible-operator binaries.
