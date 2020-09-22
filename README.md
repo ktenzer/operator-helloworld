@@ -289,7 +289,9 @@ rules:
       - pods
       - pods/exec
       - pods/log
+```      
       **- services**
+```      
     verbs:
       - create
       - delete
@@ -313,30 +315,32 @@ rules:
       - patch
       - update
       - watch
-  - apiGroups:
-    - ""
-    - config.openshift.io
-    resources:
-    - ingresses
-    verbs:
-    - get
-    - list
-    - watch
-  - apiGroups:
-    - ""
-    - route.openshift.io
-    resources:
-    - routes
-    - routes/custom-host
-    verbs:
-    - create
-    - delete
-    - deletecollection
-    - get
-    - list
-    - patch
-    - update
-    - watch
+```      
+  **- apiGroups:**
+    **- ""**
+    **- config.openshift.io**
+    **resources:**
+    **- ingresses**
+    **verbs:**
+    **- get**
+    **- list**
+    **- watch**
+  **- apiGroups:**
+    **- ""**
+    **- route.openshift.io**
+    **resources:**
+    **- routes**
+    **- routes/custom-host**
+    **verbs:**
+    **- create**
+    **- delete**
+    **- deletecollection**
+    **- get**
+    **- list**
+    **- patch**
+    **- update**
+    **- watch**
+```    
   ##
   ## Rules for cache.helloworld.example.com/v1, Kind: Helloworld
   ##
